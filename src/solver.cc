@@ -231,18 +231,18 @@ Parse(const std::string &input,
       clause.insert(literal);
     }
     // BUG: empty clauses are not allowed
-    // if (clause.empty()) {
-    //  error_consumer("Empty clauses are not allowed");
-    //  return {};
-    //}
+    if (clause.empty()) {
+      error_consumer("Empty clauses are not allowed");
+      return {};
+    }
     clauses.push_back(clause);
   }
   // BUG: nicer if we check there was not excess input
-  // tok = GetToken(input, index);
-  // if (tok.has_value()) {
-  //  error_consumer("Too much input");
-  //  return {};
-  //}
+  tok = GetToken(input, index);
+  if (tok.has_value()) {
+    error_consumer("Too much input");
+    return {};
+  }
   return {{num_vars, clauses}};
   } catch (const std::invalid_argument&) {
     error_consumer("Parse error");
