@@ -173,7 +173,7 @@ std::optional<SatInstance>
 Parse(const std::string &input,
       const std::function<void(const std::string &)> &error_consumer) {
   // BUG: try-catch required because std::stroi may throw an exception.
-  // try {
+  try {
   size_t index = 0;
   auto tok = GetToken(input, index);
   if (!tok.has_value()) {
@@ -212,10 +212,10 @@ Parse(const std::string &input,
     while (true) {
       tok = GetToken(input, index);
       // BUG: need to check whether token exists
-      // if (!tok.has_value()) {
-      //  error_consumer("Unexpected end of input");
-      //  return {};
-      //}
+      if (!tok.has_value()) {
+        error_consumer("Unexpected end of input");
+        return {};
+      }
       int32_t literal = std::stoi(tok.value());
       if (literal == 0) {
         break;
@@ -244,11 +244,11 @@ Parse(const std::string &input,
   //  return {};
   //}
   return {{num_vars, clauses}};
-  //} catch (const std::invalid_argument&) {
-  //  error_consumer("Parse error");
-  //  return {};
-  //} catch (const std::out_of_range&) {
-  //  error_consumer("Parse error");
-  //  return {};
-  //}
+  } catch (const std::invalid_argument&) {
+    error_consumer("Parse error");
+    return {};
+  } catch (const std::out_of_range&) {
+    error_consumer("Parse error");
+    return {};
+  }
 }
