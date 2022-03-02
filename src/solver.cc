@@ -138,7 +138,7 @@ SolveNaiveRecursive(SatInstance instance,
     // BUG: should be -decision_var
     // BUG: should call SolveNaiveRecursive
     assignment.insert(decision_var);
-    return SolveRecursive(instance.Assert(-decision_var).value(), assignment,
+    return SolveRecursive(instance.Assert(decision_var).value(), assignment,
                           unassigned);
   }
 }
