@@ -76,12 +76,12 @@ SolveRecursive(SatInstance instance, std::unordered_set<int32_t> assignment,
   }
   // BUG (performance): we should cease solving if there are no more clauses
   // to satisfy
-  // if (simplified_instance->clauses.empty()) {
-  //  for (auto var : unassigned) {
-  //    assignment.insert(var);
-  //  }
-  //  return {assignment};
-  //}
+  if (simplified_instance->clauses.empty()) {
+    for (auto var : unassigned) {
+      assignment.insert(var);
+    }
+    return {assignment};
+  }
   if (unassigned.empty()) {
     return {assignment};
   }
@@ -158,9 +158,9 @@ bool IsSatisfyingAssignment(const SatInstance &instance,
   std::optional<SatInstance> remaining{instance};
   for (auto literal : assignment) {
     // BUG (injected)
-    if (literal == 10) {
-      return false;
-    }
+    //if (literal == 10) {
+    //  return false;
+    //}
     remaining = remaining.value().Assert(literal);
     if (!remaining.has_value()) {
       return false;
@@ -221,13 +221,13 @@ Parse(const std::string &input,
         break;
       }
       // BUG: we only want literals that are in range
-      // if (literal > static_cast<int>(num_vars) ||
-      //    literal < -static_cast<int>(num_vars)) {
-      //  std::stringstream stringstream;
-      //  stringstream << "Literal " << literal << " out of range";
-      //  error_consumer(stringstream.str());
-      //  return {};
-      //}
+       if (literal > static_cast<int>(num_vars) ||
+          literal < -static_cast<int>(num_vars)) {
+        std::stringstream stringstream;
+        stringstream << "Literal " << literal << " out of range";
+        error_consumer(stringstream.str());
+        return {};
+      }
       clause.insert(literal);
     }
     // BUG: empty clauses are not allowed

@@ -6,7 +6,12 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   if (!maybe_instance.has_value()) {
     return 0;
   }
-  Solve(maybe_instance.value());
+  auto maybe_assignment = Solve(maybe_instance.value());
+  if (maybe_instance.has_value()) {
+    if (!IsSatisfyingAssignment(maybe_instance.value(), maybe_assignment.value())) {
+      abort();
+    }
+  }
   return 0; // Non-zero return values are reserved for future use.
 }
 
