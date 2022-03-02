@@ -18,9 +18,9 @@ std::optional<std::string> GetToken(const std::string &input, size_t &index) {
   std::string result;
   while (true) {
     // BUG: 'index' can be out of bounds
-    // if (index == input.size()) {
-    //  break;
-    //}
+    if (index == input.size()) {
+      break;
+    }
     char current = input[index];
     index++;
     if (current == ' ' || current == '\n') {
